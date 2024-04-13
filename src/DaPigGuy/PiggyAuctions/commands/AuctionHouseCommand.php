@@ -12,12 +12,13 @@ use DaPigGuy\PiggyAuctions\menu\pages\MainMenu;
 use DaPigGuy\PiggyAuctions\PiggyAuctions;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
+use pocketmine\plugin\Plugin;
 use pocketmine\utils\TextFormat;
 
 class AuctionHouseCommand extends BaseCommand
 {
     /** @var PiggyAuctions */
-    protected $plugin;
+    protected Plugin $plugin;
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
