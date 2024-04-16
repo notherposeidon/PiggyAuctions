@@ -116,7 +116,7 @@ class AuctionManager
             return strtolower($bid->getBidder()) === strtolower($player);
         });
     }
-    
+
     public static function jsonDeserialize(array $data): ?Item {
         $name = $data["id"];
         $count = (int) $data["count"];
@@ -126,9 +126,18 @@ class AuctionManager
         $item->setCount($count);
 
         if (!empty($tag)) {
-            $nbt = JsonNbtParser::parseJson($tag);
-            if ($nbt instanceof CompoundTag) {
-                $item->setNamedTag($nbt);
+            try {
+                $nbt = JsonNbtParser::parseJson($tag);
+                if ($nbt instanceof CompoundTag) {
+                    $item->setNamedTag($nbt);
+                }
+            } catch (\Throwable $e) {
+                // Handle parsing error gracefully
+                // You can log the error message or throw an exception
+                // For example:
+                // error_log("Error parsing JSON: " . $e->getMessage());
+                // throw new \RuntimeException("Error parsing JSON: " . $e->getMessage());
+                return null; // Return null to indicate failure
             }
         }
 
@@ -144,7 +153,7 @@ class AuctionManager
         ];
         return json_encode($itemArray);
     }
-    
+
     public function addAuction(string $auctioneer, Item $item, int $startDate, int $endDate, int $startingBid): void
     {
         $this->plugin->getDatabase()->executeInsert("piggyauctions.add", [
